@@ -20,6 +20,16 @@ export type Career = {
 
 export const CAREERS: Career[] = [
   {
+    id: 'ai-cloud-architect',
+    title: 'AI Cloud Architect',
+    tagline: 'Design the cloud systems that power tomorrow\u2019s AI.',
+    streams: ['PCM'],
+    category: 'Tech',
+    salary: '₹15–45 LPA',
+    growth: '+41%',
+    skills: ['AWS / Azure', 'Kubernetes', 'MLOps'],
+  },
+  {
     id: 'uiux',
     title: 'UI/UX Designer',
     tagline: 'Shape how millions of people use apps every day.',
@@ -160,6 +170,89 @@ export const CAREERS: Career[] = [
     skills: ['Python', 'Visualization', 'Sports Science'],
   },
 ]
+
+const DEGREES: Record<string, string> = {
+  'ai-cloud-architect': 'B.Tech in Computer Science or IT',
+  uiux: 'B.Des in Interaction Design or any degree + portfolio',
+  'data-scientist': 'B.Tech / B.Sc in CS, Statistics or Maths',
+  'product-manager': 'Any degree, then an MBA or APM programme',
+  'marine-biologist': 'B.Sc in Zoology or Marine Science',
+  'genetic-counselor': 'B.Sc Genetics, then M.Sc Genetic Counseling',
+  'biomedical-engineer': 'B.Tech in Biomedical Engineering',
+  robotics: 'B.Tech in Mechatronics, ECE or Robotics',
+  'game-designer': 'B.Des in Game Design or B.Sc Animation',
+  'fintech-analyst': 'B.Com / BBA / B.Tech, plus CFA Level 1',
+  'brand-strategist': 'BBA / BMS or B.A. Mass Communication',
+  'content-creator': 'B.A. Journalism, English or Mass Media',
+  psychologist: 'B.A. / B.Sc Psychology, then M.A. Counseling',
+  'urban-planner': 'B.Plan or B.Arch, then M.Plan',
+  'sports-analyst': 'B.Sc Statistics / Data Science or B.Tech',
+}
+
+export type RoadmapStep = { stage: string; title: string; detail: string }
+
+export function getRoadmap(career: Career): RoadmapStep[] {
+  return [
+    {
+      stage: 'Class 11–12',
+      title: `Build your ${career.streams[0]} foundation`,
+      detail: `Score well in core subjects and start a small ${career.category.toLowerCase()} side project.`,
+    },
+    {
+      stage: 'College',
+      title: 'Choose the right degree',
+      detail: DEGREES[career.id] ?? 'A related undergraduate degree.',
+    },
+    {
+      stage: 'Skill up',
+      title: `Master ${career.skills.slice(0, 2).join(' & ')}`,
+      detail: `Use free courses, internships and competitions to practise ${career.skills.join(', ')}.`,
+    },
+    {
+      stage: 'First role',
+      title: `Launch as a junior ${career.title}`,
+      detail: `Typical starting range ${career.salary}, in a field growing ${career.growth} each year.`,
+    },
+  ]
+}
+
+type MatchSeed = { id: string; match: number; hook: string; keywords: string[] }
+
+const STREAM_MATCHES: Record<Stream, MatchSeed[]> = {
+  PCM: [
+    { id: 'ai-cloud-architect', match: 94, hook: 'Your maths edge makes complex AI systems feel like puzzles.', keywords: ['coding', 'tech', 'computer', 'ai', 'cloud'] },
+    { id: 'uiux', match: 89, hook: 'Logic plus creativity is exactly what great product design needs.', keywords: ['drawing', 'design', 'art', 'apps'] },
+    { id: 'data-scientist', match: 87, hook: 'You can turn the numbers you already love into real-world impact.', keywords: ['maths', 'math', 'data', 'numbers', 'sports'] },
+  ],
+  PCB: [
+    { id: 'biomedical-engineer', match: 93, hook: 'Blend biology with tech to build devices that save lives.', keywords: ['tech', 'building', 'coding', 'machines'] },
+    { id: 'genetic-counselor', match: 90, hook: 'Your biology depth meets a calling to help families directly.', keywords: ['helping', 'people', 'genetics', 'health'] },
+    { id: 'marine-biologist', match: 86, hook: 'Turn your curiosity about life into ocean-saving research.', keywords: ['nature', 'ocean', 'animals', 'travel'] },
+  ],
+  COMMERCE: [
+    { id: 'fintech-analyst', match: 94, hook: 'Your finance basics are the launchpad for UPI-scale innovation.', keywords: ['money', 'finance', 'tech', 'numbers'] },
+    { id: 'product-manager', match: 90, hook: 'Business sense plus big-picture thinking make you a natural leader.', keywords: ['leading', 'business', 'apps', 'ideas'] },
+    { id: 'brand-strategist', match: 86, hook: 'Shape how the world sees the brands you already follow.', keywords: ['marketing', 'social', 'stories', 'fashion'] },
+  ],
+  ARTS: [
+    { id: 'uiux', match: 93, hook: 'Your eye for people and visuals is the heart of great UX.', keywords: ['drawing', 'design', 'art', 'apps'] },
+    { id: 'psychologist', match: 90, hook: 'Your empathy and curiosity about minds can change lives.', keywords: ['helping', 'people', 'listening', 'mind'] },
+    { id: 'content-creator', match: 87, hook: 'Turn your storytelling instinct into audience-building strategy.', keywords: ['writing', 'video', 'music', 'stories'] },
+  ],
+}
+
+export type TopMatch = { career: Career; match: number; hook: string }
+
+export function getTopMatches(stream: Stream, interests: string): TopMatch[] {
+  const text = interests.toLowerCase()
+  return STREAM_MATCHES[stream]
+    .map((seed) => {
+      const career = CAREERS.find((c) => c.id === seed.id)!
+      const boost = seed.keywords.some((k) => text.includes(k)) ? 4 : 0
+      return { career, match: Math.min(99, seed.match + boost), hook: seed.hook }
+    })
+    .sort((a, b) => b.match - a.match)
+}
 
 export type MarketTrend = {
   id: string

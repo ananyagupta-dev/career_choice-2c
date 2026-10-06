@@ -2,9 +2,11 @@
 
 import { useMemo, useState } from 'react'
 import { Bookmark, BookmarkCheck, Compass, LogOut, Search, TrendingUp, X } from 'lucide-react'
-import { CAREERS, STREAMS, type Career, type Stream } from '@/lib/career-data'
+import { CAREERS, STREAMS, getTopMatches, type Career, type Stream } from '@/lib/career-data'
 import { cn } from '@/lib/utils'
 import type { StudentProfile } from './onboarding-screen'
+import { TopMatches } from './top-matches'
+import { RoadmapModal } from './roadmap-modal'
 
 type StreamFilter = Stream | 'ALL'
 const CATEGORIES = ['All', 'Tech', 'Creative', 'Science', 'Business', 'Social'] as const
@@ -14,6 +16,11 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
   const [streamFilter, setStreamFilter] = useState<StreamFilter>(profile.stream)
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>('All')
   const [saved, setSaved] = useState<Set<string>>(new Set())
+  const [selected, setSelected] = useState<{ career: Career; match?: number } | null>(null)
+  const topMatches = useMemo(
+    () => getTopMatches(profile.stream, profile.interests),
+    [profile.stream, profile.interests],
+  )
 
   const careers = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -39,6 +46,7 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
   }
 
   return (
+    <>
     <div className="min-h-0 flex-1 overflow-y-auto scrollbar-none">
       <div className="flex flex-col gap-5 px-5 pb-6 pt-3">
         <header className="flex items-center justify-between gap-3">
@@ -87,6 +95,12 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
           )}
         </div>
 
+        <TopMatches
+          matches={topMatches}
+          stream={profile.stream}
+          onOpen={(m) => setSelected({ career: m.career, match: m.match })}
+        />
+
         <div className="flex flex-col gap-2.5">
           <p className="text-xs font-semibold uppercase tracking-wider text-sea-deep/60">Stream</p>
           <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-none">
@@ -134,12 +148,25 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
                 career={career}
                 saved={saved.has(career.id)}
                 onToggleSave={() => toggleSave(career.id)}
+                onOpen={() =>
+                  setSelected({ career, match: topMatches.find((m) => m.career.id === career.id)?.match })
+                }
               />
             ))}
           </ul>
         )}
       </div>
     </div>
+    {selected && (
+      <RoadmapModal
+        career={selected.career}
+        match={selected.match}
+        saved={saved.has(selected.career.id)}
+        onToggleSave={() => toggleSave(selected.career.id)}
+        onClose={() => setSelected(null)}
+      />
+    )}
+    </>
   )
 }
 
@@ -177,19 +204,29 @@ function CareerCard({
   career,
   saved,
   onToggleSave,
+  onOpen,
 }: {
   career: Career
   saved: boolean
   onToggleSave: () => void
+  onOpen: () => void
 }) {
   return (
-    <li className="flex flex-col gap-3 rounded-3xl border border-mint bg-white p-4 shadow-sm">
+    <li className="relative flex flex-col gap-3 rounded-3xl border border-mint bg-white p-4 shadow-sm transition hover:border-sea/60 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="w-fit rounded-full bg-mint-soft px-2.5 py-0.5 text-xs font-semibold text-sea">
             {career.category}
           </span>
-          <h3 className="text-lg font-bold text-sea-deep">{career.title}</h3>
+          <h3 className="text-lg font-bold text-sea-deep">
+            <button
+              type="button"
+              onClick={onOpen}
+              className="text-left after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none focus-visible:after:ring-4 focus-visible:after:ring-mint"
+            >
+              {career.title}
+            </button>
+          </h3>
         </div>
         <button
           type="button"
@@ -197,7 +234,7 @@ function CareerCard({
           aria-pressed={saved}
           aria-label={saved ? `Remove ${career.title} from saved` : `Save ${career.title}`}
           className={cn(
-            'flex size-10 shrink-0 items-center justify-center rounded-full transition',
+            'relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full transition',
             saved ? 'bg-sea text-offwhite' : 'bg-mint-soft text-sea hover:bg-mint',
           )}
         >
