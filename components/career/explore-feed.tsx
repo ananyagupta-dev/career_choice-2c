@@ -131,7 +131,7 @@ export function ExploreFeed({ profile, onReset, saved, onToggleSave }: { profile
             </button>
           </div>
         ) : (
-          <ul className="flex flex-col gap-3.5">
+          <ul className="grid grid-cols-1 gap-3.5 lg:grid-cols-2">
             {careers.map((career) => (
               <CareerCard
                 key={career.id}
@@ -152,7 +152,7 @@ export function ExploreFeed({ profile, onReset, saved, onToggleSave }: { profile
         career={selected.career}
         match={selected.match}
         saved={saved.has(selected.career.id)}
-        onToggleSave={() => toggleSave(selected.career.id)}
+        onToggleSave={() => onToggleSave(selected.career.id)}
         onClose={() => setSelected(null)}
       />
     )}
