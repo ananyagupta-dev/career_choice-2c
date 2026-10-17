@@ -1,66 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { BarChart3, Compass, MessageCircle } from 'lucide-react'
+import { BarChart3, Compass, Home, MessageCircle, UserRound, Bookmark } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { StudentProfile } from './onboarding-screen'
 import { ExploreFeed } from './explore-feed'
 import { AssistantPanel } from './assistant-panel'
 import { MarketPanel } from './market-panel'
+import { ProfilePage } from './profile-page'
 
-type Tab = 'explore' | 'assistant' | 'market'
-
-const TABS: { id: Tab; label: string; icon: typeof Compass }[] = [
-  { id: 'explore', label: 'Explore', icon: Compass },
-  { id: 'assistant', label: 'Margdarshak', icon: MessageCircle },
-  { id: 'market', label: 'Market', icon: BarChart3 },
-]
+type Tab = 'home' | 'explore' | 'saved' | 'profile' | 'assistant' | 'market'
+const NAV = [{ id: 'home', label: 'Home', icon: Home }, { id: 'explore', label: 'Explore Paths', short: 'Explore', icon: Compass }, { id: 'saved', label: 'Saved Paths', short: 'Saved', icon: Bookmark }, { id: 'profile', label: 'Profile', icon: UserRound }] as const
 
 export function Dashboard({ profile, onReset }: { profile: StudentProfile; onReset: () => void }) {
-  const [tab, setTab] = useState<Tab>('explore')
-
-  return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex min-h-0 flex-1 flex-col">
-        {tab === 'explore' && <ExploreFeed profile={profile} onReset={onReset} />}
-        {tab === 'assistant' && <AssistantPanel profile={profile} />}
-        {tab === 'market' && <MarketPanel />}
-      </div>
-
-      <nav
-        aria-label="CAREER CHOICE navigation"
-        className="shrink-0 border-t border-mint bg-white/95 px-4 pb-7 pt-2.5 backdrop-blur"
-      >
-        <ul className="flex items-center justify-around">
-          {TABS.map(({ id, label, icon: Icon }) => {
-            const active = tab === id
-            return (
-              <li key={id}>
-                <button
-                  type="button"
-                  onClick={() => setTab(id)}
-                  aria-current={active ? 'page' : undefined}
-                  className={cn(
-                    'flex min-w-20 flex-col items-center gap-1 rounded-2xl px-3 py-1.5 text-xs font-semibold transition',
-                    active ? 'text-sea' : 'text-sea-deep/50 hover:text-sea-deep',
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'flex h-8 w-14 items-center justify-center rounded-full transition',
-                      active && 'bg-mint',
-                    )}
-                  >
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-                  {label}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-        <div aria-hidden="true" className="mx-auto mt-2 h-1 w-32 rounded-full bg-sea-deep/80" />
-      </nav>
-    </div>
-  )
+  const [tab, setTab] = useState<Tab>('explore'); const [saved, setSaved] = useState<Set<string>>(new Set())
+  const toggleSave = (id: string) => setSaved(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next })
+  const activeTab = tab === 'home' ? 'explore' : tab
+  return <div className="flex min-h-0 flex-1 flex-col bg-offwhite"><header className="hidden shrink-0 items-center justify-between border-b border-mint bg-white/95 px-8 py-4 backdrop-blur md:flex"><button type="button" onClick={() => setTab('explore')} className="flex items-center gap-2 text-left"><span className="flex size-9 items-center justify-center rounded-xl bg-sea text-offwhite"><Compass className="size-5" /></span><span className="text-lg font-extrabold tracking-tight text-sea-deep">CAREER CHOICE</span></button><nav aria-label="Main navigation" className="flex items-center gap-1">{NAV.map(({ id, label }) => <button key={id} type="button" onClick={() => setTab(id)} className={cn('rounded-full px-4 py-2 text-sm font-semibold transition', activeTab === id ? 'bg-mint text-sea-deep' : 'text-sea-deep/60 hover:bg-mint-soft')}>{label}</button>)}</nav><button type="button" onClick={() => setTab('profile')} className="flex size-10 items-center justify-center rounded-full bg-mint text-sea-deep" aria-label="Open profile"><UserRound className="size-5" /></button></header><main className="flex min-h-0 flex-1 flex-col">{(tab === 'explore' || tab === 'home') && <ExploreFeed profile={profile} onReset={onReset} saved={saved} onToggleSave={toggleSave} />}{tab === 'assistant' && <AssistantPanel profile={profile} />}{tab === 'market' && <MarketPanel />}{(tab === 'profile' || tab === 'saved') && <ProfilePage profile={profile} saved={saved} onToggleSave={toggleSave} />}</main><div className="hidden border-t border-mint bg-white px-8 py-3 lg:flex lg:justify-center lg:gap-8"><button type="button" onClick={() => setTab('assistant')} className="flex items-center gap-2 text-sm font-semibold text-sea"><MessageCircle className="size-4" /> Ask Margdarshak AI</button><button type="button" onClick={() => setTab('market')} className="flex items-center gap-2 text-sm font-semibold text-sea"><BarChart3 className="size-4" /> Market insights</button></div><nav aria-label="Mobile navigation" className="flex shrink-0 border-t border-mint bg-white/95 px-2 pb-5 pt-2 backdrop-blur md:hidden"><ul className="flex w-full items-center justify-around">{NAV.map(({ id, label, short, icon: Icon }) => <li key={id}><button type="button" onClick={() => setTab(id)} aria-current={activeTab === id ? 'page' : undefined} className={cn('flex min-w-16 flex-col items-center gap-1 rounded-2xl px-2 py-1.5 text-[11px] font-semibold', activeTab === id ? 'text-sea' : 'text-sea-deep/50')}><span className={cn('flex size-8 items-center justify-center rounded-full', activeTab === id && 'bg-mint')}><Icon className="size-4" /></span>{short ?? label}</button></li>)}</ul></nav></div>
 }

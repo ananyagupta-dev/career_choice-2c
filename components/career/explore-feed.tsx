@@ -11,14 +11,13 @@ import { RoadmapModal } from './roadmap-modal'
 type StreamFilter = Stream | 'ALL'
 const CATEGORIES = ['All', 'Tech', 'Creative', 'Science', 'Business', 'Social'] as const
 
-export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onReset: () => void }) {
+export function ExploreFeed({ profile, onReset, saved, onToggleSave }: { profile: StudentProfile; onReset: () => void; saved: Set<string>; onToggleSave: (id: string) => void }) {
   const [query, setQuery] = useState('')
-  const [streamFilter, setStreamFilter] = useState<StreamFilter>(profile.stream)
+  const [streamFilter, setStreamFilter] = useState<StreamFilter>(profile.stream ?? 'ALL')
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>('All')
-  const [saved, setSaved] = useState<Set<string>>(new Set())
   const [selected, setSelected] = useState<{ career: Career; match?: number } | null>(null)
   const topMatches = useMemo(
-    () => getTopMatches(profile.stream, profile.interests),
+    () => getTopMatches(profile.stream ?? 'PCM', profile.interests),
     [profile.stream, profile.interests],
   )
 
@@ -35,15 +34,6 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
       )
     })
   }, [query, streamFilter, category])
-
-  function toggleSave(id: string) {
-    setSaved((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
 
   return (
     <>
@@ -97,7 +87,7 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
 
         <TopMatches
           matches={topMatches}
-          stream={profile.stream}
+          stream={profile.stream ?? 'PCM'}
           onOpen={(m) => setSelected({ career: m.career, match: m.match })}
         />
 
@@ -147,7 +137,7 @@ export function ExploreFeed({ profile, onReset }: { profile: StudentProfile; onR
                 key={career.id}
                 career={career}
                 saved={saved.has(career.id)}
-                onToggleSave={() => toggleSave(career.id)}
+                onToggleSave={() => onToggleSave(career.id)}
                 onOpen={() =>
                   setSelected({ career, match: topMatches.find((m) => m.career.id === career.id)?.match })
                 }

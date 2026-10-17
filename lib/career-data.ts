@@ -1,10 +1,27 @@
+export type EducationLevel = 'middle' | 'highschool' | 'senior' | 'college'
 export type Stream = 'PCM' | 'PCB' | 'COMMERCE' | 'ARTS'
+export type Specialization = 'Tech' | 'Business' | 'Creative' | 'Science' | 'Social'
+
+export const EDUCATION_LEVELS: { id: EducationLevel; label: string; hint: string }[] = [
+  { id: 'middle', label: 'Middle School', hint: '6th–8th' },
+  { id: 'highschool', label: 'High School', hint: '9th–10th' },
+  { id: 'senior', label: 'Senior High', hint: '11th–12th' },
+  { id: 'college', label: 'College / Graduate', hint: 'Undergraduate or beyond' },
+]
 
 export const STREAMS: { id: Stream; label: string; hint: string }[] = [
   { id: 'PCM', label: 'PCM', hint: 'Physics, Chem, Maths' },
   { id: 'PCB', label: 'PCB', hint: 'Physics, Chem, Bio' },
   { id: 'COMMERCE', label: 'COMMERCE', hint: 'Business & Finance' },
   { id: 'ARTS', label: 'ARTS', hint: 'Humanities & Design' },
+]
+
+export const SPECIALIZATIONS: { id: Specialization; label: string; hint: string }[] = [
+  { id: 'Tech', label: 'Technology', hint: 'AI, Cloud, Software' },
+  { id: 'Business', label: 'Business', hint: 'Finance, Startups, Consulting' },
+  { id: 'Creative', label: 'Creative', hint: 'Design, Media, Content' },
+  { id: 'Science', label: 'Science', hint: 'Research, Life Sciences' },
+  { id: 'Social', label: 'Social Impact', hint: 'NGO, Policy, Sustainability' },
 ]
 
 export type Career = {
