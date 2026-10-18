@@ -1,20 +1,13 @@
 'use client'
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { GraduationCap, Sparkles } from 'lucide-react'
 import { PhoneFrame } from './phone-frame'
 import { OnboardingScreen, type StudentProfile } from './onboarding-screen'
 import { Dashboard } from './dashboard'
-
 export function CareerChoiceApp() {
-  const [profile, setProfile] = useState<StudentProfile | null>(null)
-
-  return (
-    <PhoneFrame>
-      {profile ? (
-        <Dashboard profile={profile} onReset={() => setProfile(null)} />
-      ) : (
-        <OnboardingScreen onSubmit={setProfile} />
-      )}
-    </PhoneFrame>
-  )
+ const [profile,setProfile]=useState<StudentProfile|null>(null); const [intro,setIntro]=useState(true); const [theme,setTheme]=useState<'dark'|'light'>('dark')
+ useEffect(()=>{const saved=window.localStorage.getItem('career-choice-theme') as 'dark'|'light'|null; if(saved)setTheme(saved); const seen=window.sessionStorage.getItem('career-choice-intro-seen'); if(seen)setIntro(false)},[])
+ useEffect(()=>{document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.classList.toggle('light',theme==='light');window.localStorage.setItem('career-choice-theme',theme)},[theme])
+ const finishIntro=()=>{window.sessionStorage.setItem('career-choice-intro-seen','1');setIntro(false)}
+ return <PhoneFrame>{intro?<section className="relative flex min-h-[calc(100dvh-2rem)] flex-1 items-center justify-center overflow-hidden bg-[#080d1d] px-6 text-center text-white"><div className="absolute left-[10%] top-[20%] size-40 rounded-full bg-cyan-400/20 blur-3xl"/><div className="absolute bottom-[12%] right-[5%] size-56 rounded-full bg-purple-500/20 blur-3xl"/><div className="relative max-w-md motion-safe:animate-[fadeIn_.8s_ease-out]"><div className="mx-auto flex size-24 items-center justify-center rounded-[2rem] border border-cyan-200/30 bg-cyan-300 text-slate-950 shadow-[0_0_70px_rgba(125,231,240,.35)]"><GraduationCap className="size-12"/></div><p className="mt-8 text-xs font-bold uppercase tracking-[.35em] text-cyan-200">Your path, illuminated</p><h1 className="mt-3 text-5xl font-black tracking-[-.06em] sm:text-6xl">CAREER<br/><span className="bg-gradient-to-r from-cyan-200 to-purple-300 bg-clip-text text-transparent">CHOICE</span></h1><p className="mx-auto mt-5 max-w-xs text-sm leading-6 text-slate-300">A clearer next step starts with one honest conversation.</p><button onClick={finishIntro} className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-cyan-300 px-7 text-sm font-extrabold tracking-wide text-slate-950 shadow-lg shadow-cyan-900/30 hover:bg-cyan-200">BEGIN JOURNEY <Sparkles className="size-4"/></button></div></section>:profile?<Dashboard profile={profile} onReset={()=>setProfile(null)} theme={theme} onThemeChange={setTheme}/>:<OnboardingScreen onSubmit={setProfile}/>}</PhoneFrame>
 }
