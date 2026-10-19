@@ -16,7 +16,7 @@ const NAV = [
   { id: 'market' as const, label: 'Market Insights', mobile: 'Market', icon: BarChart3 },
 ]
 
-export function Dashboard({ profile, onReset, theme, onThemeChange }: { profile: StudentProfile; onReset: () => void; theme: 'dark' | 'light'; onThemeChange: (theme: 'dark' | 'light') => void }) {
+export function Dashboard({ profile, onReset, onProfileChange, theme, onThemeChange }: { profile: StudentProfile; onReset: () => void; onProfileChange: (profile: StudentProfile) => void; theme: 'dark' | 'light'; onThemeChange: (theme: 'dark' | 'light') => void }) {
   const [tab, setTab] = useState<Tab>('explore')
   const [saved, setSaved] = useState<Set<string>>(new Set())
   const toggleSave = (id: string) => setSaved((prev) => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next })
@@ -30,7 +30,7 @@ export function Dashboard({ profile, onReset, theme, onThemeChange }: { profile:
       <p className="px-3 text-xs leading-5 text-slate-500">A clearer next step starts with one honest conversation.</p>
     </aside>
     <header className="flex shrink-0 items-center justify-between border-b border-border bg-card/90 px-4 py-3 backdrop-blur lg:hidden"><button type="button" onClick={() => setTab('explore')} className="flex items-center gap-2"><span className="flex size-9 items-center justify-center rounded-xl bg-cyan-300 text-slate-950"><Compass className="size-5" /></span><span className="text-sm font-black tracking-[.12em]">CAREER CHOICE</span></button><button type="button" onClick={() => setTab('profile')} className="flex size-10 items-center justify-center rounded-full bg-cyan-300/20 text-cyan-200" aria-label="Open profile"><UserRound className="size-5" /></button></header>
-    <main className="flex min-h-0 min-w-0 flex-1 flex-col">{(tab === 'explore' || tab === 'home') && <ExploreFeed profile={profile} onReset={onReset} saved={saved} onToggleSave={toggleSave} />}{tab === 'assistant' && <AssistantPanel profile={profile} />}{tab === 'market' && <MarketPanel />}{tab === 'profile' && <ProfilePage profile={profile} saved={saved} onToggleSave={toggleSave} theme={theme} onThemeChange={onThemeChange} />}</main>
+    <main className="flex min-h-0 min-w-0 flex-1 flex-col">{(tab === 'explore' || tab === 'home') && <ExploreFeed profile={profile} onReset={onReset} saved={saved} onToggleSave={toggleSave} />}{tab === 'assistant' && <AssistantPanel profile={profile} />}{tab === 'market' && <MarketPanel />}{tab === 'profile' && <ProfilePage profile={profile} saved={saved} onToggleSave={toggleSave} onProfileChange={onProfileChange} theme={theme} onThemeChange={onThemeChange} />}</main>
     <nav aria-label="Mobile navigation" className="grid shrink-0 grid-cols-4 border-t border-border bg-card px-1 py-2 lg:hidden">{[{ id: 'explore' as const, label: 'Explore', icon: Compass }, { id: 'assistant' as const, label: 'Guide', icon: MessageCircle }, { id: 'market' as const, label: 'Market', icon: BarChart3 }, { id: 'profile' as const, label: 'Profile', icon: UserRound }].map(({ id, label, icon: Icon }) => <button key={id} type="button" onClick={() => setTab(id)} className={cn('flex flex-col items-center gap-1 rounded-xl py-2 text-[10px] font-bold', active === id ? 'bg-cyan-300 text-slate-950' : 'text-muted-foreground')}><Icon className="size-4" />{label}</button>)}</nav>
   </div>
 }

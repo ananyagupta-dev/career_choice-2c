@@ -61,8 +61,8 @@ export function MarketPanel() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-3xl bg-sea p-4 text-offwhite">
+        <div className="grid grid-cols-2 gap-2.5">
+          <div className="rounded-2xl bg-sea p-3.5 text-offwhite">
             <p className="text-xs font-medium text-offwhite/80">New openings</p>
             <p className="text-2xl font-extrabold">3.8L+</p>
             <p className="text-xs text-offwhite/80">this quarter</p>
@@ -90,7 +90,7 @@ export function MarketPanel() {
                       type="button"
                       onClick={() => setExpanded(open ? null : t.id)}
                       aria-expanded={open}
-                      className="flex w-full items-center gap-3 p-4 text-left"
+                      className="flex w-full items-center gap-3 p-3 text-left"
                     >
                       <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-mint-soft text-sea">
                         <Briefcase className="size-5" aria-hidden="true" />

@@ -69,7 +69,7 @@ export function AssistantPanel({ profile }: { profile: StudentProfile }) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <header className="flex shrink-0 items-center gap-3 border-b border-mint bg-gradient-to-r from-mint to-mint-soft px-5 pb-4 pt-2">
+      <header className="flex shrink-0 items-center gap-3 border-b border-mint bg-gradient-to-r from-mint to-mint-soft px-4 py-2.5">
         <MargdarshakAvatar size={52} glow />
         <div className="flex flex-col">
           <h2 className="text-lg font-extrabold text-sea-deep">Margdarshak AI</h2>
@@ -82,7 +82,7 @@ export function AssistantPanel({ profile }: { profile: StudentProfile }) {
 
       <div data-chat-scroll className="min-h-0 flex-1 overflow-y-auto scrollbar-none">
         <div className="flex flex-col gap-3.5 px-4 py-5" aria-live="polite">
-          <div className="flex flex-col items-center gap-2 rounded-3xl border border-mint bg-white px-5 py-5 text-center">
+          <div className="flex flex-row items-center gap-3 rounded-2xl border border-mint bg-white px-4 py-3 text-left">
             <MargdarshakAvatar size={64} glow />
             <p className="text-base font-bold text-sea-deep">Welcome to Margdarshak AI</p>
             <p className="text-pretty text-sm leading-relaxed text-sea-deep/70">
