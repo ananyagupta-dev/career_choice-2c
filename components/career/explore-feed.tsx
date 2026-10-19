@@ -131,7 +131,7 @@ export function ExploreFeed({ profile, onReset, saved, onToggleSave }: { profile
             </button>
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-3.5 lg:grid-cols-2">
+          <ul className="grid grid-cols-1 gap-3 lg:grid-cols-2">
             {careers.map((career) => (
               <CareerCard
                 key={career.id}

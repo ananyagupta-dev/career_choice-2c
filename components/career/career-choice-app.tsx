@@ -43,7 +43,7 @@ export function CareerChoiceApp() {
           </div>
         </section>
       ) : profile ? (
-        <Dashboard profile={profile} onReset={() => setProfile(null)} theme={theme} onThemeChange={setTheme} />
+        <Dashboard profile={profile} onReset={() => setProfile(null)} onProfileChange={setProfile} theme={theme} onThemeChange={setTheme} />
       ) : <OnboardingScreen onSubmit={setProfile} />}
     </PhoneFrame>
   )
