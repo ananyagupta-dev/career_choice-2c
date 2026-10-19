@@ -25,13 +25,13 @@ export function TopMatches({
         </div>
       </div>
 
-      <ol className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 scrollbar-none">
+      <ol className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {matches.map((m, i) => (
-          <li key={m.career.id} className="w-[78%] shrink-0 snap-start">
+          <li key={m.career.id} className="min-w-0">
             <button
               type="button"
               onClick={() => onOpen(m)}
-              className="group flex h-full w-full flex-col gap-2.5 rounded-2xl bg-offwhite p-3.5 text-left text-sea-deep transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mint"
+              className="group flex min-h-[230px] h-full w-full flex-col gap-2.5 rounded-2xl bg-offwhite p-4 text-left text-sea-deep transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mint"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="flex size-7 items-center justify-center rounded-full bg-mint text-xs font-extrabold text-sea-deep">
