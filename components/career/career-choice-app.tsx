@@ -30,7 +30,7 @@ export function CareerChoiceApp() {
   }
 
   return (
-    <PhoneFrame>
+    <div className="w-full max-w-full min-h-screen overflow-x-hidden"><PhoneFrame>
       <AnimatePresence mode="wait">
         {intro ? (
           <motion.section
@@ -59,7 +59,7 @@ export function CareerChoiceApp() {
         ) : (
           <motion.div key="onboarding" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="flex min-h-0 flex-1"><OnboardingScreen onSubmit={setProfile} /></motion.div>
         )}
-      </AnimatePresence>
-    </PhoneFrame>
+</AnimatePresence>
+      </PhoneFrame></div>
   )
 }

@@ -31,7 +31,7 @@ export function TopMatches({
             <button
               type="button"
               onClick={() => onOpen(m)}
-              className="group flex min-h-[230px] h-full w-full flex-col gap-2.5 rounded-2xl bg-offwhite p-4 text-left text-sea-deep transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mint"
+              className="group flex h-auto min-h-[190px] w-full flex-col gap-2.5 overflow-hidden rounded-2xl bg-offwhite p-4 text-left text-sea-deep transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mint"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="flex size-7 items-center justify-center rounded-full bg-mint text-xs font-extrabold text-sea-deep">
@@ -42,7 +42,7 @@ export function TopMatches({
                 </span>
               </div>
               <span className="text-base font-bold leading-snug">{m.career.title}</span>
-              <span className="line-clamp-2 text-pretty text-sm leading-relaxed text-sea-deep/70">{m.hook}</span>
+              <span className="overflow-hidden whitespace-normal break-words text-pretty text-sm leading-relaxed text-sea-deep/70">{m.hook}</span>
               <div aria-hidden="true" className="h-1.5 w-full overflow-hidden rounded-full bg-mint-soft">
                 <div className="h-full rounded-full bg-sea" style={{ width: `${m.match}%` }} />
               </div>
