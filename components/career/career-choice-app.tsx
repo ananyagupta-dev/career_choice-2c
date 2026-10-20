@@ -30,7 +30,7 @@ export function CareerChoiceApp() {
   }
 
   return (
-    <div className="w-full max-w-full min-h-screen overflow-x-hidden"><PhoneFrame>
+    <div className="w-full max-w-full min-h-screen overflow-x-hidden bg-[#0B0F19] text-white"><PhoneFrame>
       <AnimatePresence mode="wait">
         {intro ? (
           <motion.section

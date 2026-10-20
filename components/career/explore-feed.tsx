@@ -93,7 +93,7 @@ export function ExploreFeed({ profile, onReset, saved, onToggleSave }: { profile
 
         <div className="flex flex-col gap-2.5">
           <p className="text-xs font-semibold uppercase tracking-wider text-sea-deep/60">Stream</p>
-          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-none">
+          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 whitespace-nowrap scrollbar-none">
             {(['ALL', ...STREAMS.map((s) => s.id)] as StreamFilter[]).map((s) => (
               <Chip key={s} active={streamFilter === s} onClick={() => setStreamFilter(s)}>
                 {s === 'ALL' ? 'All streams' : s}
@@ -101,7 +101,7 @@ export function ExploreFeed({ profile, onReset, saved, onToggleSave }: { profile
               </Chip>
             ))}
           </div>
-          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 scrollbar-none">
+          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 whitespace-nowrap scrollbar-none">
             {CATEGORIES.map((c) => (
               <Chip key={c} variant="soft" active={category === c} onClick={() => setCategory(c)}>
                 {c}
